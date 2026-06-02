@@ -59,44 +59,44 @@
   --color-luxury-border: var(--luxury-border-color);
 }
 
-/* Light mode — warm off-white, comfortable luxury */
+/* Light mode — warm cream, comfortable luxury */
 :root {
   --radius: 0.625rem;
-  --background: #F9F8F6;
-  --foreground: #1A1A1A;
-  --card: #FDFCFA;
-  --card-foreground: #1A1A1A;
-  --popover: #FDFCFA;
-  --popover-foreground: #1A1A1A;
+  --background: #F0EDE8;
+  --foreground: #2A2520;
+  --card: #F5F2ED;
+  --card-foreground: #2A2520;
+  --popover: #F5F2ED;
+  --popover-foreground: #2A2520;
   --primary: #B8960F;
   --primary-foreground: #FFFFFF;
-  --secondary: #F0EDE8;
-  --secondary-foreground: #1A1A1A;
-  --muted: #F0EDE8;
-  --muted-foreground: #6B6B6B;
-  --accent: #EAE7E2;
-  --accent-foreground: #1A1A1A;
+  --secondary: #E8E4DF;
+  --secondary-foreground: #2A2520;
+  --muted: #E8E4DF;
+  --muted-foreground: #7A7068;
+  --accent: #E2DED8;
+  --accent-foreground: #2A2520;
   --destructive: #DC2626;
-  --border: rgba(0, 0, 0, 0.07);
-  --input: rgba(0, 0, 0, 0.05);
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.06);
   --ring: #B8960F;
   --chart-1: #B8960F;
   --chart-2: #2D1B36;
   --chart-3: #8B7355;
   --chart-4: #D4AF37;
   --chart-5: #A08040;
-  --sidebar: #FDFCFA;
-  --sidebar-foreground: #1A1A1A;
+  --sidebar: #F5F2ED;
+  --sidebar-foreground: #2A2520;
   --sidebar-primary: #B8960F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F0EDE8;
-  --sidebar-accent-foreground: #1A1A1A;
-  --sidebar-border: rgba(0, 0, 0, 0.07);
+  --sidebar-accent: #E8E4DF;
+  --sidebar-accent-foreground: #2A2520;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
   --sidebar-ring: #B8960F;
-  --luxury-text-color: #1A1A1A;
-  --luxury-text-secondary-color: #6B6B6B;
-  --luxury-section-color: #FDFCFA;
-  --luxury-border-color: rgba(0, 0, 0, 0.07);
+  --luxury-text-color: #2A2520;
+  --luxury-text-secondary-color: #7A7068;
+  --luxury-section-color: #F5F2ED;
+  --luxury-border-color: rgba(0, 0, 0, 0.08);
 }
 
 /* Dark mode (default) */
@@ -145,6 +145,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter), var(--font-geist-sans), system-ui, sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 }
 
@@ -216,11 +217,10 @@ html {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.04;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
-  mix-blend-mode: overlay;
 }
 
 /* Section divider — gold diamond */
@@ -274,16 +274,14 @@ html {
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.07;
+  opacity: 0.06;
   background: radial-gradient(circle, #D4AF37 0%, transparent 70%);
   transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease;
-  mix-blend-mode: screen;
+  will-change: left, top;
 }
 
 .dark .cursor-glow {
-  opacity: 0.05;
-  mix-blend-mode: screen;
+  opacity: 0.04;
 }
 
 /* Magnetic Button pull effect */
@@ -393,11 +391,6 @@ html {
 .dark .premium-card:hover {
   box-shadow: 0 20px 60px rgba(212, 175, 55, 0.12),
               0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-/* Noise texture for light mode */
-:root .grain-overlay::after {
-  opacity: 0.02;
 }
 
 /* Premium scroll behavior for specific sections */

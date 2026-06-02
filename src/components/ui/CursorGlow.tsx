@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -27,10 +27,14 @@ export function CursorGlow() {
   const [position, setPosition] = useState({ x: -300, y: -300 });
   const [isVisible, setIsVisible] = useState(false);
   const isDesktop = useIsDesktop();
+  const rafRef = useRef<number>(0);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    setPosition({ x: e.clientX, y: e.clientY });
-    if (!isVisible) setIsVisible(true);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
+    });
   }, [isVisible]);
 
   const handleMouseLeave = useCallback(() => {
@@ -46,6 +50,7 @@ export function CursorGlow() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [isDesktop, handleMouseMove, handleMouseLeave]);
 

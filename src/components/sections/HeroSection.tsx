@@ -149,7 +149,7 @@ export function HeroSection() {
           aria-label="Scroll down"
         >
           <span className="text-[9px] tracking-[0.3em] uppercase text-luxury-gold/40 group-hover:text-luxury-gold/60 transition-colors duration-300">
-            Scroll
+            {t.hero.scroll}
           </span>
           <div className="w-px h-8 bg-gradient-to-b from-luxury-gold/40 to-transparent" />
         </motion.a>

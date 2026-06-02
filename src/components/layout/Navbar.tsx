@@ -16,7 +16,7 @@ const navLinks = [
   { key: "contact", href: "#contact" },
 ] as const;
 
-const sectionIds = ["about", "rare-vault", "services", "journal", "contact"];
+const sectionIds = ["about", "rare-vault", "services", "testimonials", "journal", "contact"];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);

@@ -7,6 +7,7 @@ import { Star } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useRef } from "react";
 import { TextReveal } from "@/components/ui/TextReveal";
+import { FlowerModal } from "@/components/ui/FlowerModal";
 
 const flowerImages: Record<string, string> = {
   "Ghost Orchid": "/images/flower-ghost-orchid.png",
@@ -53,10 +54,12 @@ function FlowerCard({
   flower,
   index,
   isRTLLayout,
+  onClick,
 }: {
   flower: { name: string; origin: string; rarity: string; symbolism: string; category: string };
   index: number;
   isRTLLayout: boolean;
+  onClick: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
@@ -75,7 +78,17 @@ function FlowerCard({
         ease: [0.25, 0.1, 0.25, 1],
       }}
       layout
-      className="group relative aspect-[3/4] overflow-hidden premium-card luxury-card-border"
+      className="group relative aspect-[3/4] overflow-hidden premium-card luxury-card-border cursor-pointer"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details: ${flower.name}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       {/* Image */}
       <div className="absolute inset-0 overflow-hidden">
@@ -102,6 +115,13 @@ function FlowerCard({
       <div className="absolute top-3 start-3 z-10">
         <span className="px-2.5 py-1 text-[9px] tracking-[0.2em] uppercase bg-background/70 backdrop-blur-md text-luxury-gold rounded-sm border border-luxury-gold/20">
           {flower.category}
+        </span>
+      </div>
+
+      {/* "View" indicator on hover */}
+      <div className="absolute top-3 end-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-500">
+        <span className="px-2.5 py-1 text-[9px] tracking-[0.2em] uppercase bg-luxury-gold/90 text-luxury-charcoal rounded-sm font-medium">
+          {isRTLLayout ? "عرض" : "View"}
         </span>
       </div>
 
@@ -156,6 +176,13 @@ function FlowerCard({
 export function RareVaultSection() {
   const { t, isRTLLayout } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [selectedFlower, setSelectedFlower] = useState<{
+    name: string;
+    origin: string;
+    rarity: string;
+    symbolism: string;
+    category: string;
+  } | null>(null);
 
   const flowers = t.vault.flowers.map((flower) => ({
     ...flower,
@@ -165,6 +192,10 @@ export function RareVaultSection() {
   const filtered = activeFilter === "all"
     ? flowers
     : flowers.filter((f) => f.category === activeFilter);
+
+  const selectedImageSrc = selectedFlower
+    ? flowerImages[selectedFlower.name] || "/images/flower-ghost-orchid.png"
+    : "";
 
   const filterButtons = [
     { key: "all", label: t.vault.filterAll },
@@ -186,7 +217,7 @@ export function RareVaultSection() {
             transition={{ duration: 0.6 }}
             className="inline-block text-xs tracking-[0.35em] uppercase text-luxury-gold mb-4"
           >
-            ✦ Collection ✦
+            ✦ {isRTLLayout ? "المجموعة" : "Collection"} ✦
           </motion.span>
 
           <div className="overflow-hidden">
@@ -240,7 +271,7 @@ export function RareVaultSection() {
           className="text-center text-[10px] tracking-[0.2em] uppercase mb-6 sm:mb-8"
           style={{ color: "var(--luxury-text-secondary-color)" }}
         >
-          {filtered.length} {filtered.length === 1 ? "bloom" : "blooms"}
+          {filtered.length} {filtered.length === 1 ? t.vault.bloomCountSingle : t.vault.bloomCount}
         </motion.p>
 
         {/* Gallery Grid */}
@@ -252,11 +283,19 @@ export function RareVaultSection() {
                 flower={flower}
                 index={index}
                 isRTLLayout={isRTLLayout}
+                onClick={() => setSelectedFlower(flower)}
               />
             ))}
           </AnimatePresence>
         </motion.div>
       </div>
+
+      {/* Flower Detail Modal */}
+      <FlowerModal
+        flower={selectedFlower}
+        imageSrc={selectedImageSrc}
+        onClose={() => setSelectedFlower(null)}
+      />
     </section>
   );
 }

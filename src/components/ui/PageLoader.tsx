@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface PageLoaderProps {
   isVisible: boolean;
@@ -8,6 +9,8 @@ interface PageLoaderProps {
 }
 
 export function PageLoader({ isVisible, onComplete }: PageLoaderProps) {
+  const { t, language } = useLanguage();
+
   return (
     <AnimatePresence onExitComplete={onComplete}>
       {isVisible && (
@@ -23,8 +26,8 @@ export function PageLoader({ isVisible, onComplete }: PageLoaderProps) {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-12"
           >
-            <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl font-bold tracking-[0.3em] text-luxury-gold">
-              NOIR FLORALE
+            <h1 className={`font-playfair text-2xl sm:text-3xl md:text-4xl font-bold tracking-[0.3em] text-luxury-gold ${language === "ar" ? "font-amiri" : ""}`}>
+              {language === "ar" ? "نوار فلورال" : "NOIR FLORALE"}
             </h1>
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
@@ -51,7 +54,7 @@ export function PageLoader({ isVisible, onComplete }: PageLoaderProps) {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="mt-6 text-[9px] tracking-[0.5em] uppercase text-luxury-text-secondary"
           >
-            Curating Rarity
+            {t.common.loading}
           </motion.p>
         </motion.div>
       )}

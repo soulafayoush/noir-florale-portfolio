@@ -1,16 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ServicesMarquee } from "@/components/sections/ServicesMarquee";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { RareVaultSection } from "@/components/sections/RareVaultSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { EditorialSection } from "@/components/sections/EditorialSection";
+import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { CursorGlow } from "@/components/ui/CursorGlow";
+import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 
 function GoldDiamondDivider() {
   return (
@@ -43,6 +47,7 @@ export default function HomePage() {
     <>
       <CustomCursor />
       <CursorGlow />
+      <WhatsAppFloat />
       <main className="min-h-screen flex flex-col">
         <Navbar />
         <HeroSection />
@@ -67,7 +72,13 @@ export default function HomePage() {
 
         <GradientFadeDivider />
 
+        <TestimonialsSection />
+
+        <ThinLineDivider />
+
         <EditorialSection />
+
+        <NewsletterSection />
 
         <div className="bg-background">
           <GoldDiamondDivider />

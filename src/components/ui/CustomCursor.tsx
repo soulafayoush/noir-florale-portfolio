@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 function useIsDesktop() {
@@ -29,32 +29,38 @@ export function CustomCursor() {
   const [isClicking, setIsClicking] = useState(false);
   const isDesktop = useIsDesktop();
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const rafRef = useRef<number>(0);
 
-  const springConfig = { damping: 20, stiffness: 400, mass: 0.4 };
+  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    cursorX.set(e.clientX);
-    cursorY.set(e.clientY);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+    });
   }, [cursorX, cursorY]);
 
   const handleMouseOver = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    const hoverable = target.closest(
-      "a, button, [role='button'], input, textarea, select, [data-cursor-hover], .cursor-hover"
-    );
-    if (hoverable) {
+    if (
+      target.closest(
+        "a, button, [role='button'], input, textarea, select, [data-cursor-hover], .cursor-hover"
+      )
+    ) {
       setIsHovering(true);
     }
   }, []);
 
   const handleMouseOut = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    const hoverable = target.closest(
-      "a, button, [role='button'], input, textarea, select, [data-cursor-hover], .cursor-hover"
-    );
-    if (hoverable) {
+    if (
+      target.closest(
+        "a, button, [role='button'], input, textarea, select, [data-cursor-hover], .cursor-hover"
+      )
+    ) {
       setIsHovering(false);
     }
   }, []);
@@ -69,8 +75,8 @@ export function CustomCursor() {
     if (!isDesktop || isTouchDevice) return;
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    document.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("mouseover", handleMouseOver, { passive: true });
+    document.addEventListener("mouseout", handleMouseOut, { passive: true });
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("touchstart", handleTouchStart, { once: true });
@@ -82,6 +88,7 @@ export function CustomCursor() {
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("touchstart", handleTouchStart);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [isDesktop, isTouchDevice, handleMouseMove, handleMouseOver, handleMouseOut, handleMouseDown, handleMouseUp, handleTouchStart]);
 
@@ -120,8 +127,8 @@ export function CustomCursor() {
           width: isHovering ? 6 : 4,
           height: isHovering ? 6 : 4,
           opacity: isHovering ? 1 : 0.7,
-          x: isHovering ? "-50%" : "-50%",
-          y: isHovering ? "-50%" : "-50%",
+          x: "-50%",
+          y: "-50%",
         }}
         transition={{ duration: 0.2 }}
       />

@@ -6,6 +6,12 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { TextReveal } from "@/components/ui/TextReveal";
 
+const editorialImages = [
+  "/images/editorial-1.png",
+  "/images/editorial-2.png",
+  "/images/editorial-3.png",
+];
+
 export function EditorialSection() {
   const { t, isRTLLayout } = useLanguage();
   const Arrow = isRTLLayout ? ArrowLeft : ArrowRight;
@@ -38,7 +44,7 @@ export function EditorialSection() {
             transition={{ duration: 0.6 }}
             className="inline-block text-xs tracking-[0.35em] uppercase text-luxury-gold mb-4"
           >
-            ✦ Journal ✦
+            ✦ {isRTLLayout ? "المجلة" : "Journal"} ✦
           </motion.span>
 
           <div className="overflow-hidden">
@@ -81,28 +87,17 @@ export function EditorialSection() {
               className="group premium-card"
             >
               <div className="bg-luxury-section rounded-sm luxury-card-double overflow-hidden hover:border-luxury-gold/25">
-                {/* Decorative thumbnail area */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-luxury-charcoal">
-                  {/* Minimal decorative pattern */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-15 group-hover:opacity-25 transition-opacity duration-700">
-                    <div className="relative">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-luxury-gold/40" />
-                      <div className="absolute inset-2 rounded-full border border-luxury-gold/25" />
-                      <div className="absolute inset-4 rounded-full border border-luxury-gold/15" />
-                      <div className="absolute inset-6 rounded-full border border-luxury-gold/10" />
-                      {index === 0 && (
-                        <div className="absolute -top-2 -left-2 w-4 h-4 rounded-full bg-luxury-gold/20" />
-                      )}
-                      {index === 1 && (
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-luxury-gold/30" />
-                      )}
-                      {index === 2 && (
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-6 h-px bg-luxury-gold/30" />
-                      )}
-                    </div>
-                  </div>
-                  {/* Subtle gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/10 transition-all duration-700" />
+                {/* Real editorial thumbnail */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={editorialImages[index]}
+                    alt={article.title}
+                    fill
+                    className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent group-hover:from-black/15 transition-all duration-700" />
                   {/* Article number indicator */}
                   <div className="absolute top-3 start-3 w-8 h-8 flex items-center justify-center rounded-full border border-luxury-gold/25 bg-background/70 backdrop-blur-sm">
                     <span className="text-[10px] font-medium tracking-wider text-luxury-gold">

@@ -155,7 +155,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
-          disableTransitionOnChange={false}
+          disableTransitionOnChange={true}
         >
           <LanguageProvider>
             <PageLoaderProvider>

@@ -143,7 +143,7 @@ export function AboutSection() {
             >
               <div className="w-8 h-px bg-luxury-gold/30" />
               <span className="text-[10px] tracking-[0.3em] uppercase text-luxury-gold/50">
-                Est. 2013
+                {t.about.established}
               </span>
               <div className="w-8 h-px bg-luxury-gold/30" />
             </motion.div>
