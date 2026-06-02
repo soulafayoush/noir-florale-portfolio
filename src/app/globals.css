@@ -59,44 +59,44 @@
   --color-luxury-border: var(--luxury-border-color);
 }
 
-/* Light mode — pure white luxury (Aesop / Byredo standard) */
+/* Light mode — warm off-white, comfortable luxury */
 :root {
   --radius: 0.625rem;
-  --background: #FFFFFF;
-  --foreground: #0A0A0A;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
+  --background: #F9F8F6;
+  --foreground: #1A1A1A;
+  --card: #FDFCFA;
+  --card-foreground: #1A1A1A;
+  --popover: #FDFCFA;
+  --popover-foreground: #1A1A1A;
   --primary: #B8960F;
   --primary-foreground: #FFFFFF;
-  --secondary: #F8F7F5;
-  --secondary-foreground: #0A0A0A;
-  --muted: #F8F7F5;
+  --secondary: #F0EDE8;
+  --secondary-foreground: #1A1A1A;
+  --muted: #F0EDE8;
   --muted-foreground: #6B6B6B;
-  --accent: #F5F3F0;
-  --accent-foreground: #0A0A0A;
+  --accent: #EAE7E2;
+  --accent-foreground: #1A1A1A;
   --destructive: #DC2626;
-  --border: rgba(0, 0, 0, 0.08);
-  --input: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.07);
+  --input: rgba(0, 0, 0, 0.05);
   --ring: #B8960F;
   --chart-1: #B8960F;
   --chart-2: #2D1B36;
   --chart-3: #8B7355;
   --chart-4: #D4AF37;
   --chart-5: #A08040;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0A0A0A;
+  --sidebar: #FDFCFA;
+  --sidebar-foreground: #1A1A1A;
   --sidebar-primary: #B8960F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F8F7F5;
-  --sidebar-accent-foreground: #0A0A0A;
-  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-accent: #F0EDE8;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: rgba(0, 0, 0, 0.07);
   --sidebar-ring: #B8960F;
-  --luxury-text-color: #0A0A0A;
+  --luxury-text-color: #1A1A1A;
   --luxury-text-secondary-color: #6B6B6B;
-  --luxury-section-color: #FFFFFF;
-  --luxury-border-color: rgba(0, 0, 0, 0.08);
+  --luxury-section-color: #FDFCFA;
+  --luxury-border-color: rgba(0, 0, 0, 0.07);
 }
 
 /* Dark mode (default) */
@@ -436,4 +436,148 @@ body {
   );
   background-size: 200% 100%;
   animation: shimmer-skeleton 1.5s ease-in-out infinite;
+}
+
+/* ===== INFINITE MARQUEE ===== */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+[dir="rtl"] .marquee-track {
+  animation-name: marquee-right;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ===== PROFESSIONAL CARD BORDERS ===== */
+.luxury-card-border {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.luxury-card-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.15) 25%,
+    rgba(212, 175, 55, 0) 50%,
+    rgba(212, 175, 55, 0.1) 75%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.5s ease;
+}
+
+.luxury-card-border:hover::before {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.35) 25%,
+    rgba(212, 175, 55, 0) 50%,
+    rgba(212, 175, 55, 0.25) 75%,
+    rgba(212, 175, 55, 0) 100%
+  );
+}
+
+/* Card with corner accents */
+.luxury-card-corners {
+  position: relative;
+}
+
+.luxury-card-corners::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(212, 175, 55, 0);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: border-color 0.5s ease;
+}
+
+.luxury-card-corners:hover::after {
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+/* Double-line elegant border */
+.luxury-card-double {
+  position: relative;
+  border: 1px solid var(--luxury-border-color);
+}
+
+.luxury-card-double::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  pointer-events: none;
+  transition: border-color 0.5s ease;
+}
+
+.luxury-card-double:hover::after {
+  border-color: rgba(212, 175, 55, 0.12);
+}
+
+/* ===== FILTER BUTTON ===== */
+.filter-btn {
+  position: relative;
+  padding: 8px 20px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--luxury-border-color);
+  border-radius: 2px;
+  color: var(--luxury-text-secondary-color);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.03));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.filter-btn:hover::before,
+.filter-btn.active::before {
+  opacity: 1;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  color: #D4AF37;
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.filter-btn.active {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.06);
 }

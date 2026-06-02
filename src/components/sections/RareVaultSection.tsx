@@ -1,19 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Star } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useRef } from "react";
 import { TextReveal } from "@/components/ui/TextReveal";
 
-const flowerImages = [
-  "/images/flower-ghost-orchid.png",
-  "/images/flower-black-rose.png",
-  "/images/flower-juliet-rose.png",
-  "/images/flower-blue-lotus.png",
-  "/images/flower-kadupul.png",
-];
+const flowerImages: Record<string, string> = {
+  "Ghost Orchid": "/images/flower-ghost-orchid.png",
+  "Black Baccara Rose": "/images/flower-black-rose.png",
+  "Juliet Rose": "/images/flower-juliet-rose.png",
+  "Blue Lotus": "/images/flower-blue-lotus.png",
+  "Kadupul Flower": "/images/flower-kadupul.png",
+  "Middlemist Red": "/images/flower-middlemist.png",
+  "Rothschild Orchid": "/images/flower-rothschild.png",
+  "Chocolate Cosmos": "/images/flower-chocolate-cosmos.png",
+  "Franklinia Tree": "/images/flower-franklinia.png",
+  "Fire Lily": "/images/flower-fire-lily.png",
+  "أوركيد الشبح": "/images/flower-ghost-orchid.png",
+  "وردة البكارا السوداء": "/images/flower-black-rose.png",
+  "وردة جولييت": "/images/flower-juliet-rose.png",
+  "اللوتس الأزرق": "/images/flower-blue-lotus.png",
+  "زهرة كادوبول": "/images/flower-kadupul.png",
+  "كميليا ميدلمست الحمراء": "/images/flower-middlemist.png",
+  "أوركيد روثتشايلد": "/images/flower-rothschild.png",
+  "كوزموس الشوكولاتة": "/images/flower-chocolate-cosmos.png",
+  "شجرة فرانكلينيا": "/images/flower-franklinia.png",
+  "زنبق النار": "/images/flower-fire-lily.png",
+};
 
 const rarityStars: Record<string, number> = {
   "Ultra Rare": 5,
@@ -21,141 +37,148 @@ const rarityStars: Record<string, number> = {
   Legendary: 5,
   Mythical: 4,
   Priceless: 5,
+  Rare: 3,
+  "Extinct in Wild": 5,
   "نادر جداً": 5,
   "نادر للغاية": 4,
   "أسطوري": 5,
   "ثمينة لا تقدر بثمن": 5,
+  "نادر": 3,
+  "منقرض في البرية": 5,
 };
+
+const filters = ["all", "orchids", "roses", "exotic", "legendary"] as const;
 
 function FlowerCard({
   flower,
-  image,
-  stars,
   index,
   isRTLLayout,
 }: {
-  flower: { name: string; origin: string; rarity: string; symbolism: string };
-  image: string;
-  stars: number;
+  flower: { name: string; origin: string; rarity: string; symbolism: string; category: string };
   index: number;
   isRTLLayout: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const stars = rarityStars[flower.rarity] || 3;
+  const imageSrc = flowerImages[flower.name] || "/images/flower-ghost-orchid.png";
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+      initial={{ opacity: 0, y: 50, scale: 0.97 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      exit={{ opacity: 0, scale: 0.95, y: 20 }}
       transition={{
-        duration: 0.8,
-        delay: index * 0.12,
+        duration: 0.6,
+        delay: (index % 6) * 0.08,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="group relative aspect-[3/4] overflow-hidden rounded-sm cursor-pointer premium-card"
+      layout
+      className="group relative aspect-[3/4] overflow-hidden premium-card luxury-card-border"
     >
-      {/* Image with reveal animation */}
+      {/* Image */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          initial={{ scale: 1.2 }}
-          animate={isInView ? { scale: 1 } : { scale: 1.2 }}
-          transition={{
-            duration: 1.4,
-            delay: index * 0.12,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
+          initial={{ scale: 1.15 }}
+          animate={isInView ? { scale: 1 } : {}}
+          transition={{ duration: 1.2, delay: (index % 6) * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
           className="w-full h-full"
         >
           <Image
-            src={image}
+            src={imageSrc}
             alt={flower.name}
             fill
-            className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-[1s] ease-out group-hover:scale-110"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         </motion.div>
       </div>
 
-      {/* Default Overlay (subtle gradient) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent transition-opacity duration-700 group-hover:from-black/80 group-hover:via-black/40" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent transition-all duration-700 group-hover:from-black/85 group-hover:via-black/40" />
 
-      {/* Always visible name at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 transition-transform duration-700 group-hover:-translate-y-2">
+      {/* Category badge */}
+      <div className="absolute top-3 start-3 z-10">
+        <span className="px-2.5 py-1 text-[9px] tracking-[0.2em] uppercase bg-background/70 backdrop-blur-md text-luxury-gold rounded-sm border border-luxury-gold/20">
+          {flower.category}
+        </span>
+      </div>
+
+      {/* Always visible info */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 transition-transform duration-700 group-hover:-translate-y-1 z-10">
         <h3
-          className={`font-playfair text-lg sm:text-xl font-semibold text-white ${
+          className={`font-playfair text-base sm:text-lg font-semibold text-white ${
             isRTLLayout ? "font-amiri" : ""
           }`}
         >
           {flower.name}
         </h3>
-        <p className="text-[10px] sm:text-xs tracking-[0.15em] uppercase text-white/40 mt-1">
+        <p className="text-[10px] sm:text-xs tracking-[0.12em] uppercase text-white/35 mt-1">
           {flower.origin}
         </p>
       </div>
 
-      {/* Cinematic Profile - appears on hover */}
-      <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-700">
-        <div className="space-y-2.5 sm:space-y-3">
+      {/* Hover details */}
+      <div className="absolute inset-0 p-4 sm:p-5 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 z-10">
+        <div className="space-y-2">
           <h3
-            className={`font-playfair text-xl sm:text-2xl font-bold text-white ${
+            className={`font-playfair text-lg sm:text-xl font-bold text-white ${
               isRTLLayout ? "font-amiri" : ""
             }`}
           >
             {flower.name}
           </h3>
 
-          <p className="text-xs sm:text-sm text-white/60 tracking-wider">
-            {flower.origin}
-          </p>
-
-          {/* Rarity Stars */}
           <div className="flex items-center gap-2">
             <div className="flex gap-0.5">
               {Array.from({ length: stars }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3 h-3 fill-luxury-gold text-luxury-gold"
-                />
+                <Star key={i} className="w-2.5 h-2.5 fill-luxury-gold text-luxury-gold" />
               ))}
               {Array.from({ length: 5 - stars }).map((_, i) => (
-                <Star
-                  key={`empty-${i}`}
-                  className="w-3 h-3 text-white/20"
-                />
+                <Star key={`e-${i}`} className="w-2.5 h-2.5 text-white/20" />
               ))}
             </div>
-            <span className="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-luxury-gold font-medium">
+            <span className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-luxury-gold font-medium">
               {flower.rarity}
             </span>
           </div>
 
-          <p className="text-xs sm:text-sm text-white/50 font-light leading-relaxed">
+          <p className="text-[11px] sm:text-xs text-white/50 font-light leading-relaxed line-clamp-2">
             {flower.symbolism}
           </p>
         </div>
       </div>
-
-      {/* Gold border on hover */}
-      <div className="absolute inset-0 border border-transparent group-hover:border-luxury-gold/30 transition-all duration-700 rounded-sm pointer-events-none" />
     </motion.div>
   );
 }
 
 export function RareVaultSection() {
   const { t, isRTLLayout } = useLanguage();
+  const [activeFilter, setActiveFilter] = useState<string>("all");
 
-  const flowers = t.vault.flowers.map((flower, index) => ({
+  const flowers = t.vault.flowers.map((flower) => ({
     ...flower,
-    image: flowerImages[index],
-    stars: rarityStars[flower.rarity] || 4,
+    category: (flower as unknown as { category: string }).category || "exotic",
   }));
+
+  const filtered = activeFilter === "all"
+    ? flowers
+    : flowers.filter((f) => f.category === activeFilter);
+
+  const filterButtons = [
+    { key: "all", label: t.vault.filterAll },
+    { key: "orchids", label: t.vault.filterOrchids },
+    { key: "roses", label: t.vault.filterRoses },
+    { key: "exotic", label: t.vault.filterExotic },
+    { key: "legendary", label: t.vault.filterLegendary },
+  ];
 
   return (
     <section id="rare-vault" className="py-24 sm:py-32 lg:py-40 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-20 lg:mb-24">
+        {/* Header */}
+        <div className="text-center mb-10 sm:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -169,7 +192,7 @@ export function RareVaultSection() {
           <div className="overflow-hidden">
             <TextReveal
               text={t.vault.title}
-              className={`font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold ${
+              className={`font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold ${
                 isRTLLayout ? "font-amiri" : ""
               }`}
               style={{ color: "var(--luxury-text-color)" }}
@@ -183,26 +206,56 @@ export function RareVaultSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-4 sm:mt-5 text-sm sm:text-base font-light max-w-md mx-auto"
+            className="mt-4 text-sm font-light max-w-md mx-auto"
             style={{ color: "var(--luxury-text-secondary-color)" }}
           >
             {t.vault.subtitle}
           </motion.p>
         </div>
 
-        {/* Gallery Grid — premium asymmetric layout on large screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7">
-          {flowers.map((flower, index) => (
-            <FlowerCard
-              key={flower.name}
-              flower={flower}
-              image={flower.image}
-              stars={flower.stars}
-              index={index}
-              isRTLLayout={isRTLLayout}
-            />
+        {/* Filter Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10 sm:mb-14"
+        >
+          {filterButtons.map((btn) => (
+            <button
+              key={btn.key}
+              onClick={() => setActiveFilter(btn.key)}
+              className={`filter-btn ${activeFilter === btn.key ? "active" : ""}`}
+            >
+              {btn.label}
+            </button>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Flower count */}
+        <motion.p
+          key={activeFilter}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center text-[10px] tracking-[0.2em] uppercase mb-6 sm:mb-8"
+          style={{ color: "var(--luxury-text-secondary-color)" }}
+        >
+          {filtered.length} {filtered.length === 1 ? "bloom" : "blooms"}
+        </motion.p>
+
+        {/* Gallery Grid */}
+        <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((flower, index) => (
+              <FlowerCard
+                key={flower.name}
+                flower={flower}
+                index={index}
+                isRTLLayout={isRTLLayout}
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

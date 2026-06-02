@@ -2,6 +2,7 @@
 
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { ServicesMarquee } from "@/components/sections/ServicesMarquee";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { RareVaultSection } from "@/components/sections/RareVaultSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -46,29 +47,28 @@ export default function HomePage() {
         <Navbar />
         <HeroSection />
 
-        {/* Divider: Hero → About — thin gold line with diamond */}
+        {/* Services Marquee Banner — animated infinite scroll */}
+        <ServicesMarquee />
+
+        {/* Divider */}
         <div className="bg-background">
           <GoldDiamondDivider />
         </div>
 
         <AboutSection />
 
-        {/* Divider: About → RareVault — gradient fade */}
         <GradientFadeDivider />
 
         <RareVaultSection />
 
-        {/* Divider: RareVault → Services — thin line */}
         <ThinLineDivider />
 
         <ServicesSection />
 
-        {/* Divider: Services → Editorial — subtle fade */}
         <GradientFadeDivider />
 
         <EditorialSection />
 
-        {/* Divider: Editorial → Contact — thin gold line with diamond */}
         <div className="bg-background">
           <GoldDiamondDivider />
         </div>

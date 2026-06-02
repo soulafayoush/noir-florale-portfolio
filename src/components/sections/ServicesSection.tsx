@@ -81,7 +81,7 @@ export function ServicesSection() {
                   delay: index * 0.15,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="group relative p-7 sm:p-9 lg:p-10 bg-luxury-section rounded-sm border border-luxury-border premium-card hover:border-luxury-gold/25"
+                className="group relative p-7 sm:p-9 lg:p-10 bg-luxury-section rounded-sm luxury-card-double luxury-card-corners premium-card"
               >
                 {/* Hover glow background */}
                 <div className="absolute inset-0 rounded-sm bg-gradient-to-br from-luxury-gold/0 to-luxury-gold/0 group-hover:from-luxury-gold/5 group-hover:to-transparent transition-all duration-700 pointer-events-none" />

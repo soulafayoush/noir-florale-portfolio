@@ -80,7 +80,7 @@ export function EditorialSection() {
               }}
               className="group premium-card"
             >
-              <div className="bg-luxury-section rounded-sm border border-luxury-border overflow-hidden hover:border-luxury-gold/25">
+              <div className="bg-luxury-section rounded-sm luxury-card-double overflow-hidden hover:border-luxury-gold/25">
                 {/* Decorative thumbnail area */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-luxury-charcoal">
                   {/* Minimal decorative pattern */}
